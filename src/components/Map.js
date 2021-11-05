@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function Map({ places, coords, setBounds, setCoords }) {
+function Map({ places, coords, setBounds, setCoords, setChildClicked }) {
     const classes = useStyles();
     return (
         <Box className={classes.mapContainer}>
@@ -41,6 +41,7 @@ function Map({ places, coords, setBounds, setCoords }) {
                     setCoords({ lat: e.center.lat, lng: e.center.lng });
                     setBounds({ ne: e.marginBounds.ne, sw: e.marginBounds.sw });
                 }}
+                onChildClick={child => setChildClicked(child)}
             >
                 {places.length &&
                     places.map((place, index) => (
