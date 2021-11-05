@@ -12,17 +12,19 @@ function App() {
     const [places, setPlaces] = useState([]);
     const [childClicked, setChildClicked] = useState(null);
     const [coords, setCoords] = useState({});
-    const [bounds, setBounds] = useState(null)
+    const [bounds, setBounds] = useState(null);
 
     useEffect(() => {
-        setIsLoading(true);
-        getPlacesData(type).then((data) => {
-            setPlaces(
-                data.filter((place) => place.name && place.num_reviews > 0)
-            );
-            setIsLoading(false);
-        });
-    }, [type]);
+        if (bounds) {
+            setIsLoading(true);
+            getPlacesData(type, bounds.sw, bounds.ne).then((data) => {
+                setPlaces(
+                    data.filter((place) => place.name && place.num_reviews > 0)
+                );
+                setIsLoading(false);
+            });
+        }
+    }, [type, setPlaces, bounds]);
 
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(
@@ -46,7 +48,12 @@ function App() {
                     />
                 </Grid>
                 <Grid item xs={12} md={8}>
-                    <Map places={places} coords={coords} />
+                    <Map
+                        places={places}
+                        coords={coords}
+                        setBounds={setBounds}
+                        setCoords={setCoords}
+                    />
                 </Grid>
             </Grid>
         </Box>
