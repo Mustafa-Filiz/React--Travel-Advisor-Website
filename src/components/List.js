@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Box } from '@mui/system';
-import React from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import PlaceDetails from './PlaceDetails';
 
 const useStyles = makeStyles((theme) => ({
@@ -34,7 +34,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function List({ type, setType, isLoading, childClicked, places }) {
+    const [elRefs, setElRefs] = useState([])
     const classes = useStyles();
+    useEffect(() => {
+        setElRefs((refs) => {
+            return Array(places.length).fill().map((_, index) => refs[index] || createRef())
+        })
+    }, [places])
     return (
         <Box className={classes.container}>
             {isLoading ? (
@@ -60,8 +66,8 @@ function List({ type, setType, isLoading, childClicked, places }) {
                         {places &&
                             places.map((place, index) => {
                                 return (
-                                    <Grid item xs={12} key={index}>
-                                        <PlaceDetails place={place} />
+                                    <Grid item xs={12} key={index} ref={elRefs[index]} >
+                                        <PlaceDetails place={place} placeRef={elRefs[index]} selected={Number(childClicked) === index} />
                                     </Grid>
                                 );
                             })}
