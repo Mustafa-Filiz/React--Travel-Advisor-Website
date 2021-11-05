@@ -10,7 +10,10 @@ import { Box } from '@mui/system';
 import React from 'react';
 import defaultImage from '../img/defaultImage.jpg';
 
-function PlaceDetails({ place }) {
+function PlaceDetails({ place, placeRef, selected }) {
+    if(selected) {
+        placeRef?.current?.scrollIntoView({behavior:"smooth", block:"start"})
+    }
     return (
         <Card elevation={8}>
             <CardMedia
